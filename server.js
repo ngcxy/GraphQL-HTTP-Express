@@ -444,7 +444,7 @@ class SourceMongo {
         }
     }
 
-    async dbPlayer(mid, pid) {
+    async dqPlayer(mid, pid) {
         const match = await db.getMatch(mid);
         const player = await db.getPlayer(pid);
         await this._db.collection("player").updateOne({_id: ObjectId(pid)}, {$set: {num_dq: player.num_dq+1,}});
@@ -666,7 +666,7 @@ const resolvers = {
             if (err_code){
                 throw new Error();
             } else {
-                return db.dbPlayer(mid, pid);
+                return db.dqPlayer(mid, pid);
             }
         },
 
