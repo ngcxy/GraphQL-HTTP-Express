@@ -1,0 +1,127 @@
+`
+type Query {
+  player(pid: ID!): Player
+
+  players(
+    limit:      Int             # you may skip this field
+    offset:     Int             # you may skip this field
+    sort:       String          # you may skip this field
+    is_active:  Boolean
+    q:          String
+  ): [Player]!
+
+  match(mid:    ID!): Match
+
+  matches(
+    limit:      Int             # you may skip this field
+    offset:     Int             # you may skip this field
+    sort:       String          # you may skip this field
+    is_active:  Boolean
+  ): [Match]!
+
+  dashboard: Dashboard
+}
+
+type Dashboard {
+  player: DashboardPlayer
+}
+
+type DashboardPlayer {
+  avg_balance_usd_cents: Int
+  num_active: Int
+  num_inactive: Int
+  num_total: Int
+}
+
+
+type Mutation {
+  matchAward(
+    mid:    ID!
+    pid:    ID!
+    points: Int!
+  ): Match
+
+  matchCreate(
+    pid1:                ID!
+    pid2:                ID!
+    entry_fee_usd_cents: Int!
+    prize_usd_cents:     Int!
+  ): Match
+
+  matchDisqualify(
+    mid: ID!
+    pid: ID!
+  ): Match
+
+  matchEnd(
+    mid: ID!
+  ): Match
+
+  playerCreate(
+    playerInput: PlayerCreateInput
+  ): Player
+
+  playerDelete(pid: ID!): Boolean
+
+  playerDeposit(
+    pid:              ID!
+    amount_usd_cents: Int!
+  ): Player
+
+  playerUpdate(
+    pid:         ID!
+    playerInput: PlayerUpdateInput
+  ): Player
+}
+
+enum HandedEnum {
+  ambi
+  left
+  right
+}
+
+input PlayerCreateInput {
+  fname:                     String!
+  handed:                    HandedEnum
+  initial_balance_usd_cents: Int!
+  lname:                     String
+}
+
+input PlayerUpdateInput {
+  is_active: Boolean
+  lname:     String
+}
+
+
+type Player {
+  balance_usd_cents:     Int
+  efficiency:            Float
+  fname:                 String
+  handed:                HandedEnum
+  in_active_match:       Match
+  is_active:             Boolean
+  lname:                 String
+  name:                  String
+  num_dq:                Int
+  num_join:              Int
+  num_won:               Int
+  pid:                   ID!
+  total_points:          Int
+  total_prize_usd_cents: Int
+}
+
+type Match {
+  age:                 Int
+  ended_at:            String
+  entry_fee_usd_cents: Int
+  is_active:           Boolean
+  is_dq:               Boolean
+  mid:                 ID!
+  p1:                  Player!
+  p1_points:           Int
+  p2:                  Player!
+  p2_points:           Int
+  prize_usd_cents:     Int
+  winner:              Player
+}
+`
